@@ -1,0 +1,27 @@
+swagger: "2.0"
+info:
+  description: "An initial cloud endpoints example."
+  title: "BLT best endpoints"
+  version: "{{ VERSION }}"
+host: "blt-best-cloud-endpoint.endpoints.{{ PROJECT }}.cloud.goog"
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: api_key
+    in: query
+security:
+- api_key: []
+paths:
+  /endpoint:
+    get:
+      operationId: getEndpoint
+      description: The one and only path
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: string
+        default:
+          description: Unexpected error
+          schema:
+            type: string

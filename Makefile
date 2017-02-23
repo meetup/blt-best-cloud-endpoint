@@ -26,6 +26,7 @@ deploy: __get-credentials __deploy-only ## Does full deployment.
 
 __deploy-only: ## Does deployment without setting creds. (current kubectl ctx)
 	@kubectl apply -f infra/cloud-endpoint-ns.yaml
+	@kubectl apply -f infra/cloud-endpoint-svc.yaml
 	@kubectl apply -f infra/cloud-endpoint-cm.yaml
 
 # Perform our deployment.
