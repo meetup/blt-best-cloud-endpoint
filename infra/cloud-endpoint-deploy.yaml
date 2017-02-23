@@ -1,0 +1,41 @@
+apiVersion: extensions/v1beta1
+kind: cloud-endpoint
+metadata:
+  name: cloud-endpoint
+  namespace: best
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+  selector:
+      matchLabels:
+        name: cloud-endpoint
+  template:
+    metadata:
+      labels:
+        name: cloud-endpoint
+        date: "{{ DATE }}"
+    spec:
+      volumes:
+      - name: cloud-endpoint-config
+        configMap:
+          name: cloud-endpoint
+      containers:
+      - name: cloud-endpoint
+        image: node:7.4.0-alpine
+        imagePullPolicy: Always
+        env:
+        - name: FAIL_REQUEST
+          value: "{{ FAIL_REQUEST }}"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+        args:
+        - "node"
+        - "/usr/src/app/index.js"
+        volumeMounts:
+        - name: cloud-endpoint-config
+          mountPath: /usr/src/app/
