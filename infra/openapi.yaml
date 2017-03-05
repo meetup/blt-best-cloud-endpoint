@@ -1,9 +1,9 @@
 swagger: "2.0"
 info:
-  description: "An initial cloud endpoints example."
-  title: "BLT best endpoints"
-  version: "{{ VERSION }}"
-host: "blt-best-cloud-endpoint.endpoints.{{ PROJECT }}.cloud.goog"
+  description: "A cloud endpoint example."
+  title: "cloud-endpoint-blt-best.mup.zone"
+  version: "0.1"
+host: "cloud-endpoint-blt-best.mup.zone"
 securityDefinitions:
   api_key:
     type: apiKey

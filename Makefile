@@ -24,8 +24,13 @@ version: ## Convenience for knowing version in current context.
 
 deploy: __get-credentials __deploy-only ## Does full deployment.
 
+__deploy-endpoint: ## Fills openapi template and deploys to gcloud svc management.
+	VERSION=$(VERSION) \
+		envtpl < infra/openapi.yaml > target/openapi.yaml
+	gcloud service-management deploy target/openapi.yaml
+
 __deploy-only: ## Does deployment without setting creds. (current kubectl ctx)
-	@kubectl apply -f infra/cloud-endpoint-ns.yaml
+	@kubectl apply -f infra/blt-best-ns.yaml
 	@kubectl apply -f infra/cloud-endpoint-svc.yaml
 	@kubectl apply -f infra/cloud-endpoint-cm.yaml
 
@@ -36,10 +41,10 @@ __deploy-only: ## Does deployment without setting creds. (current kubectl ctx)
 
 # Check on deployment with a 1 min timeout (new replicas never came up)
 #  if we timeout rollback and error out.
-	@timeout 1m kubectl rollout status deploy cloud-endpoint --namespace best || { \
+	@timeout 1m kubectl rollout status deploy cloud-endpoint -n blt-best || { \
 		if [ "$$?" == "124" ]; then \
 			echo "Deployment timed out, rolling back"; \
-			kubectl rollout undo deploy cloud-endpoint --namespace best; \
+			kubectl rollout undo deploy cloud-endpoint -n blt-best; \
 		fi; \
 		false; \
 	}

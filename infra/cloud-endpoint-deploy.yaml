@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: cloud-endpoint
-  namespace: best
+  namespace: blt-best
 spec:
   replicas: 1
   revisionHistoryLimit: 3
@@ -40,10 +40,11 @@ spec:
         - name: cloud-endpoint-config
           mountPath: /usr/src/app/
       - name: esp
-        image: gcr.io/endpoints-release/endpoints-runtime:1
+        image: mup.cr/blt/cloud-endpoint:1-jose-snapshot
+        imagePullPolicy: Always
         args: [
           "-p", "8081",
           "-a", "127.0.0.1:8080",
-          "-s", "blt-best-cloud-endpoint.endpoints.meetup-prod.cloud.goog",
-          "-v", "2017-02-23r3",
+          "-s", "cloud-endpoint-blt-best.mup.zone",
+          "-v", "2017-03-04r0",
         ]
