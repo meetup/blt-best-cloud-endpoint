@@ -32,6 +32,7 @@ before_install:
 
 script:
   - echo "This project does not build"
+  - make view-endpoint
 
 deploy:
   - provider: script

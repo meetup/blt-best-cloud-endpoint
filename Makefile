@@ -12,6 +12,8 @@ PROJECT ?= your-project
 
 # Tells our deployment to fail or not.
 FAIL_REQUEST ?= false
+ENDPOINT_NAME = cloud-endpoint-blt-best.mup.zone
+ENDPOINT_REVISON = invalid
 
 help:
 	@echo Public targets:
@@ -24,10 +26,19 @@ version: ## Convenience for knowing version in current context.
 
 deploy: __get-credentials __deploy-only ## Does full deployment.
 
-__deploy-endpoint: ## Fills openapi template and deploys to gcloud svc management.
+deploy-endpoint: ## Fills openapi template and deploys to gcloud svc management.
 	VERSION=$(VERSION) \
 		envtpl < infra/openapi.yaml > target/openapi.yaml
 	gcloud service-management deploy target/openapi.yaml
+
+latest-revision: ## Prints latest gcloud svc revision
+	@gcloud service-management --project meetup-dev describe $(ENDPOINT_NAME) | grep id: | awk '{print $$2}'
+
+view-endpoint:
+	gcloud service-management --project meetup-dev describe $(ENDPOINT_NAME)
+
+__set-revision: ## Retrieves latest rev from google and sets to internal var.
+	$(eval ENDPOINT_REVISION=$(shell make latest-revision))
 
 __deploy-only: ## Does deployment without setting creds. (current kubectl ctx)
 	@kubectl apply -f infra/blt-best-ns.yaml
